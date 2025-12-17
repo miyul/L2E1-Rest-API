@@ -1,16 +1,30 @@
-//import and setting up middleware
-var express = require('express'); //call express
-var app = express(); //define our app using express
-// Middleware
-app.use(express.urlencoded({extended:true}));
+var express = require('express');
+var app = express();
+
+// Middleware (declare once)
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-var port = process.env.PORT || 8080 //set our port
-//Setting route and path
-// Routing
-var router = express.Router()
-router.get('/', (req,res)=>{
-res.json({message:'Hula! my API works!!!'})
-}) /*get method to handle GET request. ‘/’ is the requested endpoint. It’s the value that comes after your domain name.*/
-app.use('/api',router);
-app.listen(port); // create a server that browsers can connect to
-console.log("Magic happened at port "+port);
+
+// 1a) Route /api/hello
+app.get('/api/hello', function (req, res) {
+  res.send("Hello World!");
+});
+
+// 1b) Route /api/:name
+app.get('/api/:name', function (req, res) {
+  res.send("Goodbye " + req.params.name);
+});
+
+// 1c) Route /api/sum
+app.post('/api/sum', function (req, res) {
+  var num1 = Number(req.body.num1);
+  var num2 = Number(req.body.num2);
+
+  var sum = num1 + num2;
+  res.send("The sum is " + sum);
+});
+
+// Start server
+app.listen(3000, function () {
+  console.log("Server running on port 3000");
+});
